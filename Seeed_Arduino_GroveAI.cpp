@@ -120,7 +120,10 @@ uint16_t GroveAI::id()
 
 bool GroveAI::invoke()
 {
-    write(FEATURE_ALGO, CMD_ALGO_INOVKE, NULL, 0);
+    if(write(FEATURE_ALGO, CMD_ALGO_INOVKE, NULL, 0) == CMD_STATE_ERROR)
+    {
+        return false;
+    }
 
     CMD_STATE_T ret = CMD_STATE_RUNNING;
     while (1)
@@ -361,7 +364,7 @@ void GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_l
     }
 }
 
-void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
+CMD_STATE_T GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
 {
     uint32_t tick = millis();
     // while (digitalRead(_signal_pin) == 0)
@@ -371,7 +374,11 @@ void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
-    _wire_com->beginTransmission(_slave_addr);
+    if(_wire_com->beginTransmission(_slave_addr) == GETNAK)
+    {
+        _wire_com->endTransmission();
+        return CMD_STATE_ERROR;
+    }
     _wire_com->write(feature);
     _wire_com->write(cmd);
     for (uint16_t i = 0; i < len; i++)
@@ -379,4 +386,5 @@ void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
         _wire_com->write(buf[i]);
     }
     _wire_com->endTransmission();
+    return CMD_STATE_IDLE;
 }

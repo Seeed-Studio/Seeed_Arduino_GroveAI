@@ -202,7 +202,7 @@ public:
 
 protected:
     void read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_len, uint8_t *buf, uint16_t len);
-    void write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len);
+    CMD_STATE_T write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len);
     ALGO_INDEX_T set_algo(ALGO_INDEX_T algo);
     MODEL_INDEX_T set_model(MODEL_INDEX_T model);
     uint8_t set_confidence(uint8_t confidence);
