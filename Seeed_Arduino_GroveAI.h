@@ -29,7 +29,7 @@
 #define SEEED_ARDUINO_GROVEAI_H
 
 #include <Arduino.h>
-#include <Wire.h>
+#include "SoftwareI2C.h"
 
 #include <stdint.h>
 
@@ -179,12 +179,12 @@ class GroveAI
 private:
     cmd_sys_event_t _system;
     cmd_algo_event_t _algo;
-    TwoWire *_wire_com;
+    SoftwareI2C *_wire_com;
     uint8_t _slave_addr;
     uint32_t _signal_pin;
 
 public:
-    GroveAI(TwoWire &wire, uint8_t address = GROVE_AI_ADDRESS);
+    GroveAI(SoftwareI2C &wire, uint8_t address = GROVE_AI_ADDRESS);
     ~GroveAI();
     bool begin(ALGO_INDEX_T algo, MODEL_INDEX_T model, uint8_t confidence = 50);
     uint16_t version();

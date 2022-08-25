@@ -27,7 +27,7 @@
 
 #include "Seeed_Arduino_GroveAI.h"
 
-GroveAI::GroveAI(TwoWire &wire, uint8_t address)
+GroveAI::GroveAI(SoftwareI2C &wire, uint8_t address)
 {
     _wire_com = &wire;
 
@@ -43,8 +43,6 @@ GroveAI::~GroveAI()
 
 bool GroveAI::begin(ALGO_INDEX_T algo, MODEL_INDEX_T model, uint8_t confidence)
 {
-    _wire_com->begin();
-
     uint8_t buf[2];
 
     read(FEATURE_SYSTEM, CMD_SYS_READ_ID, NULL, 0, buf, CMD_SYS_ID_LENGTH);
@@ -317,7 +315,7 @@ bool GroveAI::config_clear()
 void GroveAI::reset()
 {
     write(FEATURE_SYSTEM, CMD_SYS_RESET, NULL, 0);
-    delay(5);
+    delay(10);
 }
 
 void GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_len, uint8_t *buf, uint16_t len)
@@ -327,7 +325,7 @@ void GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_l
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
-    delay(5);
+    delay(10);
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
@@ -344,12 +342,15 @@ void GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_l
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
-    delay(5);
+    delay(10);
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
 
-    _wire_com->requestFrom(_slave_addr, len);
+    if(!_wire_com->requestFrom(_slave_addr, len))
+    {
+        *buf = CMD_STATE_ERROR;
+    }
 
     while ((_wire_com->available()) && (i < len)) // slave may send less than requested
     {
@@ -366,7 +367,7 @@ void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
-    delay(5);
+    delay(10);
     // while (digitalRead(_signal_pin) == 0)
     // {
     // }
