@@ -172,7 +172,6 @@ def implement(arg, device):
 
 if __name__ == '__main__':
     opt = argparse.ArgumentParser()
-
     opt.add_argument('--saveimg', action='store_true', help='whether save pictures')
     opt.add_argument('--showimg', action='store_true', help='whether show pictures')
     opt.add_argument('--device-num', type=int, default=1, help='Number of devices that need to be connected')
