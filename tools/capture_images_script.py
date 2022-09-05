@@ -17,8 +17,8 @@ ProductId = [0x8060, 0x8061]
 
 class Receive_Mess():
     def __init__(self, arg, device_id):
-        self.showimg = arg.showimg
-        self.saveimg = arg.saveimg
+        self.showimg = not arg.unshow
+        self.saveimg = not arg.unsave
         self.interval = arg.interval
         self.img_number = 0
         self.ProductId = []
@@ -82,7 +82,7 @@ class Receive_Mess():
                 with open(f'./save_img/{time.time()}.jpg', 'wb') as f:
                     f.write(bytes(self.buff))
                 self.img_number += 1
-                print(f'\rnumber of stored images：{self.img_number}', end='')
+                print(f'\rNumber of saved pictures on device {self.device_id}：{self.img_number}', end='')
                 self.pre_time = time.time() * 1000
 
             if self.showimg:
@@ -93,7 +93,7 @@ class Receive_Mess():
         try:
             img = Image.open(BytesIO(self.buff))
             img = np.array(img)
-            cv2.imshow('img', img)
+            cv2.imshow('img', cv2.cvtColor(img,cv2.COLOR_RGB2BGR))
             cv2.waitKey(1)
         except:
             return
@@ -172,8 +172,8 @@ def implement(arg, device):
 
 if __name__ == '__main__':
     opt = argparse.ArgumentParser()
-    opt.add_argument('--saveimg', action='store_true', help='whether save pictures')
-    opt.add_argument('--showimg', action='store_true', help='whether show pictures')
+    opt.add_argument('--unsave', action='store_true', help='whether save pictures')
+    opt.add_argument('--unshow', action='store_true', help='whether show pictures')
     opt.add_argument('--device-num', type=int, default=1, help='Number of devices that need to be connected')
     opt.add_argument('--interval', type=int, default=300, help='ms,Minimum time interval for saving pictures')
     arg = opt.parse_args()
@@ -187,4 +187,5 @@ if __name__ == '__main__':
             pro_ls.append(Thread(target=implement, args=(arg, i,)))
         for i in pro_ls:
             i.start()
+
 
