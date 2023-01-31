@@ -50,10 +50,10 @@ bool GroveAI::begin(ALGO_INDEX_T algo, MODEL_INDEX_T model, uint8_t confidence)
     read(FEATURE_SYSTEM, CMD_SYS_READ_ID, NULL, 0, buf, CMD_SYS_ID_LENGTH);
     _system.id = buf[0] << 8 | buf[1];
 
-    if (GROVE_AI_CAMERA_ID != _system.id)
-    {
-        return false;
-    }
+    // if (GROVE_AI_CAMERA_ID != _system.id)
+    // {
+    //     return false;
+    // }
 
     read(FEATURE_SYSTEM, CMD_SYS_READ_VERSION, NULL, 0, buf, CMD_SYS_VERSION_LENGTH);
     _system.version = buf[0] << 8 | buf[1];

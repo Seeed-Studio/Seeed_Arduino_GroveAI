@@ -101,13 +101,10 @@ typedef enum
 typedef enum
 {
     MODEL_PRE_INDEX_1 = 0x00,
-    // MODEL_PRE_INDEX_2 = 0x01,
-    // MODEL_PRE_INDEX_3 = 0x02,
-    // MODEL_PRE_INDEX_4 = 0x03,
-    MODEL_EXT_INDEX_1 = 0x10,
-    MODEL_EXT_INDEX_2 = 0x11,
-    MODEL_EXT_INDEX_3 = 0x12,
-    MODEL_EXT_INDEX_4 = 0x13,
+    MODEL_EXT_INDEX_1 = 0x01,
+    MODEL_EXT_INDEX_2 = 0x02,
+    MODEL_EXT_INDEX_3 = 0x03,
+    MODEL_EXT_INDEX_4 = 0x04,
     MODEL_MAX
 } MODEL_INDEX_T;
 
