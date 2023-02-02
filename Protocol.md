@@ -2,10 +2,10 @@
 
 This document is a protocol interaction document that describes how to provide instructions for I2C interaction with Grove AI and SenseCAP AI
 
-### 1. Basic Information
+## 1. Basic Information
 **0x62** is the default address of Grove AI and SenseCAP AI. Checksums are optional depending on the firmware.
 
-### 2. Command Format
+## 2. Command Format
 - Read Command Format
     - Read Request Format
 
@@ -39,7 +39,7 @@ This document is a protocol interaction document that describes how to provide i
         Initial value: 0x00
         ```
 
-### 3. Command List
+## 3. Command List
 
 - System: 0x80
 
@@ -126,7 +126,7 @@ This document is a protocol interaction document that describes how to provide i
         ```
 
 
-- ALGO: 算法模型配置 （feature: 0xA0）
+- ALGO: 0xA0
 
     |Feature|Command|Description|Read/Write|Length|
     |---|---|---|---|---|
@@ -257,12 +257,12 @@ This document is a protocol interaction document that describes how to provide i
 
     - Read Inference Result
 
-        Read inference result, need a 2 byte parameter, and the value is the inference result index. Return the inference result, and the length is variable.
+        Read inference result, need a 2 byte parameter, and the value is the inference result index. Return the inference result, and the length is variable, see the [Algorithm Result Format](#4-algorithm-result-format).
 
         example:
         ```
         request: 0xA0 0xB0 0x00 0x00
-        response: 0x00 0x40 0x05 0x06, 0x50 0x60 [checksum]
+        response: 0x00 0x05 0x00 0x05 0x00 0x20 0x00 0x20 0x00 0x38 [checksum]
         ```
     
     - Save Configuration
@@ -284,8 +284,53 @@ This document is a protocol interaction document that describes how to provide i
         ```
 
 
+## 4. Algorithm Result Format
+
+- Object Detection
+
+    object detection result format:
+
+    |Byte|Name|Description|
+    |:---:|---|---|
+    |0-1|X|X coordinate of the object|
+    |2-3|Y|Y coordinate of the object|
+    |4-5|Width|Width of the object|
+    |6-7|Height|Height of the object|
+    |8|Confidence|Confidence of the object|
+    |9|Target|Target of the object|
 
 
+- Object Counting
+
+    object counting result format:
+
+    |Byte|Name|Description|
+    |:---:|---|---|
+    |0|Target|Target of the object|
+    |1|Count|Count of the object|
+
+- Image Classification
+
+    image classification result format:
+
+    |Byte|Name|Description|
+    |:---:|---|---|
+    |0|Target|Target of the image|
+    |1|Confidence|Confidence of the image|
+
+
+- Meter Reading
+
+    meter reading result format:
+
+    |Byte|Name|Description|
+    |:---:|---|---|
+    |0-4|Value|Value of the meter|
+
+    The unit is 0.01. For example, the value is 12345, and the meter reading is 123.45.
+
+   
+    
 
 
 
