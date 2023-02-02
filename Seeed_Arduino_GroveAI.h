@@ -38,6 +38,8 @@
 
 #define GROVE_AI_CAMERA_ID 0x0100
 
+#define VISION_AI_CAMERA_ID 0x0200
+
 #define FEATURE_SYSTEM 0x80
 #define FEATURE_GPIO 0x90
 #define FEATURE_IMU 0x93
@@ -61,6 +63,8 @@
 #define CMD_ALGO_READ_MODEL 0x10
 #define CMD_ALGO_WRITE_MODEL 0x11
 #define CMD_ALGO_MODEL_LENGTH 0x01
+#define CMD_ALGO_READ_VALID_MODEL 0x12
+#define CMD_ALGO_VALID_MODEL_LENGTH 0x04
 #define CMD_ALGO_READ_PERIOD 0x20
 #define CMD_ALGO_WRITE_PERIOD 0x21
 #define CMD_ALGO_PERIOD_LENGTH 0x04
@@ -76,6 +80,36 @@
 #define CMD_ALGO_READ_RET 0xA2
 #define CMD_ALGO_CONFIG_SAVE 0xEE
 #define CMD_ALGO_CONFIG_CLEAR 0xEF
+
+#define CMD_GPIO_READ_STATE 0x00
+#define CMD_GPIO_READ_STATE_LENGTH 0x01
+#define CMD_GPIO_WRITE_STATE 0x01
+#define CMD_GPIO_WRITE_STATE_LENGTH 0x02
+
+#define CMD_IMU_READ_SAMPLE_STATE 0x00
+#define CMD_IMU_READ_SAMPLE_LENGTH 0x01
+#define CMD_IMU_WRITE_SAMPLE_STATE 0x02
+#define CMD_IMU_WRITE_SAMPLE_LENGTH 0x01
+#define CMD_IMU_READ_ACC_AVAIABLE 0xA0
+#define CMD_IMU_READ_ACC_AVAIABLE_LENGTH 0x01
+#define CMD_IMU_READ_ACC_X 0xA1
+#define CMD_IMU_READ_ACC_X_LENGTH 0x04
+#define CMD_IMU_READ_ACC_Y 0xA2
+#define CMD_IMU_READ_ACC_Y_LENGTH 0x04
+#define CMD_IMU_READ_ACC_Z 0xA3
+#define CMD_IMU_READ_ACC_Z_LENGTH 0x04
+#define CMD_IMU_READ_GYRO_AVAIABLE 0xB0
+#define CMD_IMU_READ_GYRO_AVAIABLE_LENGTH 0x01
+#define CMD_IMU_READ_GYRO_X 0xB1
+#define CMD_IMU_READ_GYRO_X_LENGTH 0x04
+#define CMD_IMU_READ_GYRO_Y 0xB2
+#define CMD_IMU_READ_GYRO_Y_LENGTH 0x04
+#define CMD_IMU_READ_GYRO_Z 0xB3
+#define CMD_IMU_READ_GYRO_Z_LENGTH 0x04
+
+#define CMD_IMU_SAMPLE_AVAILABLE 0x01
+#define CMD_IMU_ACC_AVAILABLE 0x01
+#define CMD_IMU_GYRO_AVAILABLE 0x01
 
 typedef enum
 {
@@ -93,7 +127,7 @@ typedef enum
 typedef enum
 {
     ALGO_OBJECT_DETECTION = 0,
-    ALGO_OBJECT_COUNT = 1,
+    ALGO_OBJECT_COUNTING = 1,
     ALGO_IMAGE_CLASSIFICATION = 2,
     ALGO_MAX,
 } ALGO_INDEX_T;
@@ -105,7 +139,7 @@ typedef enum
     MODEL_EXT_INDEX_2 = 0x02,
     MODEL_EXT_INDEX_3 = 0x03,
     MODEL_EXT_INDEX_4 = 0x04,
-    MODEL_MAX
+    MODEL_MAX = 0x20,
 } MODEL_INDEX_T;
 
 /**
@@ -159,18 +193,6 @@ typedef struct
     uint8_t target;
 } object_detection_t;
 
-typedef struct
-{
-    uint8_t target;
-    uint8_t confidence;
-} image_classification_t;
-
-typedef struct
-{
-    uint8_t target;
-    uint8_t count;
-} object_count_t;
-
 class GroveAI
 {
 private:
@@ -178,10 +200,11 @@ private:
     cmd_algo_event_t _algo;
     TwoWire *_wire_com;
     uint8_t _slave_addr;
-    uint32_t _signal_pin;
+    int32_t _signal_pin;
+    bool _crc_enable;
 
 public:
-    GroveAI(TwoWire &wire, uint8_t address = GROVE_AI_ADDRESS);
+    GroveAI(TwoWire &wire, uint8_t address = GROVE_AI_ADDRESS, int32_t signal_pin = -1, bool _crc_enable = false);
     ~GroveAI();
     bool begin(ALGO_INDEX_T algo, MODEL_INDEX_T model, uint8_t confidence = 50);
     uint16_t version();
@@ -195,10 +218,11 @@ public:
     bool config_save();
     bool config_clear();
     uint16_t get_result_len();
-    void get_result(uint16_t index, uint8_t *buff, uint8_t len);
+    uint32_t get_vaild_model();
+    bool get_result(uint16_t index, uint8_t *buff, uint8_t len);
 
 protected:
-    void read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_len, uint8_t *buf, uint16_t len);
+    bool read(uint8_t feature, uint8_t cmd, uint8_t *param, uint8_t param_len, uint8_t *buf, uint16_t len);
     void write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len);
     ALGO_INDEX_T set_algo(ALGO_INDEX_T algo);
     MODEL_INDEX_T set_model(MODEL_INDEX_T model);

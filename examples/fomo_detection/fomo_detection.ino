@@ -15,10 +15,10 @@ void setup()
   Serial.println("begin");
   if (ai.begin(ALGO_OBJECT_DETECTION, MODEL_EXT_INDEX_1)) // Object detection and externel model 1
   {
-    Serial.print("Version: ");
-    Serial.println(ai.version());
-    Serial.print("ID: ");
-    Serial.println(ai.id());
+    Serial.print("Version: 0x");
+    Serial.println(ai.version(), HEX);
+    Serial.print("ID: 0x");
+    Serial.println(ai.id(), HEX);
     Serial.print("Algo: ");
     Serial.println(ai.algo());
     Serial.print("Model: ");

@@ -13,12 +13,12 @@ void setup()
   }
 
   Serial.println("begin");
-  if (ai.begin(ALGO_OBJECT_COUNT, MODEL_EXT_INDEX_1)) // Object detection and externel model 1
+  if (ai.begin(ALGO_OBJECT_COUNTING, MODEL_EXT_INDEX_1)) // Object detection and externel model 1
   {
-    Serial.print("Version: ");
-    Serial.println(ai.version());
-    Serial.print("ID: ");
-    Serial.println(ai.id());
+    Serial.print("Version: 0x");
+    Serial.println(ai.version(), HEX);
+    Serial.print("ID: 0x");
+    Serial.println(ai.id(), HEX);
     Serial.print("Algo: ");
     Serial.println(ai.algo());
     Serial.print("Model: ");
@@ -58,12 +58,12 @@ void loop()
         Serial.println(time1);
         Serial.print("Number of people: ");
         Serial.println(len);
-        object_count_t data; // get data
+        object_counting_t data; // get data
 
         for (int i = 0; i < len; i++)
         {
           Serial.println("result:detected");
-          ai.get_result(i, (uint8_t *)&data, sizeof(object_count_t)); // get result
+          ai.get_result(i, (uint8_t *)&data, sizeof(object_counting_t)); // get result
           
           Serial.print("target:");
           Serial.print(data.target);
