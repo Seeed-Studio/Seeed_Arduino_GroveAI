@@ -193,6 +193,23 @@ typedef struct
     uint8_t target;
 } object_detection_t;
 
+typedef struct
+{
+    uint8_t target;
+    uint8_t confidence;
+} image_classification_t;
+
+typedef struct
+{
+    uint8_t target;
+    uint8_t count;
+} object_counting_t;
+
+typedef struct
+{
+    uint32_t value;
+} meter_reading_t;
+
 class GroveAI
 {
 private:
