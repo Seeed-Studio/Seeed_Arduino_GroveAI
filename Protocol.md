@@ -137,8 +137,9 @@ This document is a protocol interaction document that describes how to provide i
     |0xA0|0x12|Read Valid Model|Read|4|
     |0xA0|0x40|Read Confidence|Read|1|
     |0xA0|0x41|Write Confidence|Write|1|
-    |0xA0|0xA0|Read Inference Result Set Length|Read|2|
-    |0xA0|0xB0|Read Inference Result|Read|Variable|
+    |0xA0|0xA0|Start Inference|Write|0|
+    |0xA0|0xA1|Read Inference Result Set Length|Read|2|
+    |0xA0|0xA2|Read Inference Result|Read|Variable|
     |0xA0|0xEE|Save Configuration|Write|0|
     |0xA0|0xEF|Erase Configuration|Write|0|
 
@@ -187,6 +188,7 @@ This document is a protocol interaction document that describes how to provide i
         |0x04|External Model 3|
         |0x11|Person Detction|
         |0x12|Person & Panda Classify|
+        |0x13|Meter Reading|
 
         example:
         ```
@@ -206,6 +208,7 @@ This document is a protocol interaction document that describes how to provide i
         |0x04|External Model 3|
         |0x11|Person Detction|
         |0x12|Person & Panda Classify|
+        |0x13|Meter Reading|
 
         example:
         ```
@@ -216,9 +219,9 @@ This document is a protocol interaction document that describes how to provide i
 
         Read valid model, return 4 bytes, and the value is the valid model. The bit is 1 when the model is valid, and the bit is 0 when the model is invalid.
 
-        |0|1|2|3|...|17|18|31|
-        |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-        |External Model 0|External Model 1|External Model 2|External Model 3|...|Person Detction|Person & Panda Classify|Unkown|
+        |0|1|2|3|...|17|18|19|31|
+        |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+        |External Model 0|External Model 1|External Model 2|External Model 3|...|Person Detction|Person & Panda Classify|Meter Reading|Unkown|
 
         example:
         ```
@@ -244,6 +247,15 @@ This document is a protocol interaction document that describes how to provide i
         ```
         request: 0xA0 0x41 0x00 [checksum]
         ```
+    
+    - Start Inference
+    
+        Start inference, no response.
+    
+        example:
+        ```
+        request: 0xA0 0xA0
+        ```
 
     - Read Inference Result Set Length
 
@@ -251,7 +263,7 @@ This document is a protocol interaction document that describes how to provide i
 
         example:
         ```
-        request: 0xA0 0xA0
+        request: 0xA0 0xA1
         response: 0x00 0x01 [checksum]
         ```
 
@@ -261,7 +273,7 @@ This document is a protocol interaction document that describes how to provide i
 
         example:
         ```
-        request: 0xA0 0xB0 0x00 0x00
+        request: 0xA0 0xA2 0x00 0x00
         response: 0x00 0x05 0x00 0x05 0x00 0x20 0x00 0x20 0x00 0x38 [checksum]
         ```
     
@@ -325,9 +337,11 @@ This document is a protocol interaction document that describes how to provide i
 
     |Byte|Name|Description|
     |:---:|---|---|
-    |0-4|Value|Value of the meter|
+    |0-1|X|X coordinate of the meter|
+    |2-3|Y|Y coordinate of the meter|
+    |4-7|Value|Value of the meter, int32_t|
 
-    The unit is 0.01. For example, the value is 12345, and the meter reading is 123.45.
+    **The unit is 0.0001. For example, the value is 1234567, and the meter reading is 123.4567.**
 
    
     

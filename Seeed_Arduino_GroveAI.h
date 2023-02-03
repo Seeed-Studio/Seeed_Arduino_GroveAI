@@ -74,7 +74,7 @@
 #define CMD_ALGO_READ_IOU 0x50
 #define CMD_ALGO_WRITE_IOU 0x51
 #define CMD_ALGO_IOU_LENGTH 0x01
-#define CMD_ALGO_INOVKE 0xA0
+#define CMD_ALGO_INVOKE 0xA0
 #define CMD_ALGO_READ_RET_LEN 0xA1
 #define CMD_ALGO_READ_RET_LEN_LENGTH 0x02
 #define CMD_ALGO_READ_RET 0xA2
@@ -207,6 +207,8 @@ typedef struct
 
 typedef struct
 {
+    uint16_t x;
+    uint16_t y;
     uint32_t value;
 } meter_reading_t;
 

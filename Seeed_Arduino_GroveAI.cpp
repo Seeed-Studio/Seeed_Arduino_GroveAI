@@ -149,7 +149,7 @@ uint16_t GroveAI::id()
 
 bool GroveAI::invoke()
 {
-    write(FEATURE_ALGO, CMD_ALGO_INOVKE, NULL, 0);
+    write(FEATURE_ALGO, CMD_ALGO_INVOKE, NULL, 0);
 
     CMD_STATE_T ret = CMD_STATE_RUNNING;
     while (1)
