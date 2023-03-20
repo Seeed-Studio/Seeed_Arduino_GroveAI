@@ -38,6 +38,8 @@
 #define HIMAX_SYSTEM_ADDRESS (0x79)
 #define HIMAX_FLASH_ADDRESS (0x62)
 
+#define WEI_FALSH_PAGE_SIZE (128)
+
 #define GROVE_AI_CAMERA_ID 0x0100
 
 #define VISION_AI_CAMERA_ID 0x0200
@@ -112,6 +114,7 @@
 #define CMD_IMU_SAMPLE_AVAILABLE 0x01
 #define CMD_IMU_ACC_AVAILABLE 0x01
 #define CMD_IMU_GYRO_AVAILABLE 0x01
+
 
 typedef enum
 {
@@ -238,7 +241,8 @@ private:
     void sys_read(uint32_t reg, uint32_t *data);
     void sys_write(uint32_t reg, uint32_t data);
     void flash_read(uint8_t *data, uint32_t len);
-    void flash_write(const uint8_t *data, uint32_t len);
+    void flash_write(const uint8_t *data, uint32_t len, bool crc = true);
+    uint16_t flash_crc16(const uint8_t *data, uint32_t len);
 };
 class GroveAI
 {

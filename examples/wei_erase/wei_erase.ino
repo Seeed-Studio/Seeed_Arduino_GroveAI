@@ -15,9 +15,6 @@ void setup()
     uint32_t id = wei.ID();
     Serial.print("ID: 0x");
     Serial.println(id, HEX);
-    Serial.println("Erase");
-    wei.erase();
-    Serial.println("Erase done");
 }
 
 void loop()
@@ -31,6 +28,7 @@ void loop()
         uint32_t id = wei.ID();
         Serial.print("ID: 0x");
         Serial.println(id, HEX);
+        wei.enter_bootloader();
         Serial.println("Erase");
         wei.erase();
         Serial.println("Erase done");
