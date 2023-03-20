@@ -35,6 +35,8 @@
 
 /* Exported macros ---------------------------------------------------------*/
 #define GROVE_AI_ADDRESS (0x62)
+#define HIMAX_SYSTEM_ADDRESS (0x79)
+#define HIMAX_FLASH_ADDRESS (0x62)
 
 #define GROVE_AI_CAMERA_ID 0x0100
 
@@ -213,6 +215,31 @@ typedef struct
     uint32_t value;
 } meter_reading_t;
 
+class WEI
+{
+private:
+    TwoWire *_wire_com;
+    uint32_t _pinSDA;
+    uint32_t _pinSCL;
+
+public:
+    WEI(TwoWire &wire_com = Wire, uint32_t pinSDA = PIN_WIRE_SDA, uint32_t pinSCL = PIN_WIRE_SCL): _wire_com(&wire_com), _pinSDA(pinSDA), _pinSCL(pinSCL) {}
+    ~WEI() {};
+    uint32_t ID();
+    void enter_bootloader();
+    void load_config();
+    void erase();
+    void reset();
+
+private:
+    void start_repeat();
+    void read_reg(uint8_t addr, uint8_t reg, uint8_t *data);
+    void write_reg(uint8_t addr, uint8_t reg, uint8_t data);
+    void sys_read(uint32_t reg, uint32_t *data);
+    void sys_write(uint32_t reg, uint32_t data);
+    void flash_read(uint8_t *data, uint32_t len);
+    void flash_write(const uint8_t *data, uint32_t len);
+};
 class GroveAI
 {
 private:
