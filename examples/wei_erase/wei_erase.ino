@@ -11,10 +11,7 @@ void setup()
         /* code */
     }
     delay(1000);
-    Serial.println("begin");
-    uint32_t id = wei.ID();
-    Serial.print("ID: 0x");
-    Serial.println(id, HEX);
+    Serial.println("Press any key to start erase");
 }
 
 void loop()
