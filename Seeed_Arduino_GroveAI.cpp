@@ -352,7 +352,7 @@ bool GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param,
     }
     else
     {
-        delay(10);
+        delay(40);
     }
     _wire_com->beginTransmission(_slave_addr);
     _wire_com->write(feature);
@@ -375,7 +375,7 @@ bool GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param,
     }
     else
     {
-        delay(10);
+        delay(40);
     }
 
     if (_crc_enable)
@@ -426,7 +426,7 @@ void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
     }
     else
     {
-        delay(10);
+        delay(40);
     }
 
     _wire_com->beginTransmission(_slave_addr);
@@ -469,7 +469,7 @@ void WEI::write_reg(uint8_t addr, uint8_t reg, uint8_t data)
     _wire_com->write(reg);
     _wire_com->write(data);
     _wire_com->endTransmission();
-    delay(10);
+    delay(40);
 }
 
 void WEI::read_reg(uint8_t addr, uint8_t reg, uint8_t *data)
@@ -483,7 +483,7 @@ void WEI::read_reg(uint8_t addr, uint8_t reg, uint8_t *data)
     while (!Wire.available() && millis() - time < 1000)
         ;
     *data = Wire.read();
-    delay(10);
+    delay(40);
 }
 
 void WEI::sys_read(uint32_t reg, uint32_t *data)
@@ -554,7 +554,7 @@ void WEI::flash_write(const uint8_t *data, uint32_t len, bool crc)
         _wire_com->write((uint8_t *)&crc16, 2);
     }
     _wire_com->endTransmission();
-    delay(10);
+    delay(40);
 }
 
 void WEI::flash_read(uint8_t *data, uint32_t len)
@@ -567,7 +567,7 @@ void WEI::flash_read(uint8_t *data, uint32_t len)
     {
         data[i] = _wire_com->read();
     }
-    delay(10);
+    delay(40);
 }
 
 uint32_t WEI::ID(void)
@@ -677,7 +677,7 @@ void WEI::load_config()
     {
         memcpy(cmd_flash + 4, loader_config + i, WEI_FALSH_PAGE_SIZE);
         flash_write(cmd_flash, sizeof(cmd_flash), true);
-        delay(20);
+        delay(40);
     }
     if (sizeof(loader_config) % WEI_FALSH_PAGE_SIZE)
     {
@@ -689,13 +689,13 @@ void WEI::load_config()
                sizeof(loader_config) % 128);
         flash_write(cmd_flash, sizeof(loader_config) % WEI_FALSH_PAGE_SIZE + 4,
                     true);
-        delay(20);
+        delay(40);
     }
 
     const uint8_t cmd_done[] = {0x51, 0x04, 0x00, 0x00};
     flash_write(cmd_done, sizeof(cmd_done), true);
     delay(1000);
-}
+} 
 
 void WEI::reset()
 {
