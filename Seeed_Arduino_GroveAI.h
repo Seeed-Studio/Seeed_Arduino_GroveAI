@@ -227,7 +227,7 @@ private:
     uint32_t _pinSCL;
 
 public:
-    WEI(TwoWire &wire_com = Wire, uint32_t pinSDA = PIN_WIRE_SDA, uint32_t pinSCL = PIN_WIRE_SCL): _wire_com(&wire_com), _pinSDA(pinSDA), _pinSCL(pinSCL) {}
+    WEI(TwoWire &wire_com = Wire, uint32_t pinSDA = 1, uint32_t pinSCL = 2): _wire_com(&wire_com), _pinSDA(pinSDA), _pinSCL(pinSCL) {}
     ~WEI() {};
     uint32_t ID();
     void enter_bootloader();
