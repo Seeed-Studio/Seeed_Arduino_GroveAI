@@ -412,7 +412,7 @@ bool GroveAI::read(uint8_t feature, uint8_t cmd, uint8_t *param,
 
 void GroveAI::write(uint8_t feature, uint8_t cmd, uint8_t *buf, uint16_t len)
 {
-    uint32_t tick = millis();
+    // uint32_t tick = millis();
 
     if (_signal_pin != -1)
     {

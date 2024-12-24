@@ -33,6 +33,18 @@
 
 #include <stdint.h>
 
+#ifndef PIN_WIRE_SDA
+#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_XIAO_RA4M1)
+#define PIN_WIRE_SDA SDA
+#endif
+#endif
+
+#ifndef PIN_WIRE_SCL
+#if defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_XIAO_RA4M1)
+#define PIN_WIRE_SCL SCL
+#endif
+#endif
+
 /* Exported macros ---------------------------------------------------------*/
 #define GROVE_AI_ADDRESS (0x62)
 #define HIMAX_SYSTEM_ADDRESS (0x79)

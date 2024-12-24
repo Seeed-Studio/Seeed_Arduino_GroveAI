@@ -80,6 +80,6 @@ void loop()
   }
   else
   {
-    state == 0;
+    state = 0;
   }
 }
